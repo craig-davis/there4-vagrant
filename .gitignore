@@ -1,0 +1,11 @@
+# Ignore system files
+.DS_Store
+thumbs.db
+__MACOSX
+._*
+
+# Vagrant Setup
+.vagrant
+
+# Apache Log Files
+logs
