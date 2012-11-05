@@ -34,7 +34,7 @@ class config_sql
   }
 
   exec {
-    'mysql.create-c5-db':
+    'mysql.create-db':
       unless => "mysql -u${params::dbuser} -p${params::dbpass} ${params::dbname}",
       path    => '/bin:/usr/bin',
       command => "mysql -uroot -proot -e \"create database ${params::dbname};\"",
@@ -42,48 +42,25 @@ class config_sql
   }
 
   exec {
-    'mysql.populate-c5-db':
+    'mysql.populate-db':
       unless => "mysql -u${params::dbuser} -p${params::dbpass} ${params::dbname}",
       path    => '/bin:/usr/bin',
       command => "mysql -uroot -proot ${params::dbname} < ${params::dbfile}",
-      require => Exec["mysql.create-c5-db"]
+      require => Exec["mysql.create-db"]
   }
 
   exec {
-    'mysql.permissions-c5-db':
+    'mysql.permissions-db':
       path    => '/bin:/usr/bin',
       command => "mysql -uroot -proot -e \"grant all privileges on ${params::dbname}.* to ${params::dbuser}@localhost identified by '${params::dbpass}';\"",
-      require => Exec["mysql.populate-c5-db"]
-  }
-
-  exec {
-    'mysql.create-report-db':
-      unless => "mysql -u${params::dbuser_report} -p${params::dbpass_report} ${params::dbname_report}",
-      path    => '/bin:/usr/bin',
-      command => "mysql -uroot -proot -e \"create database ${params::dbname_report};\"",
-      require => Exec["mysql.password"]
-  }
-
-  exec {
-    'mysql.populate-report-db':
-      unless => "mysql -u${params::dbuser_report} -p${params::dbpass_report} ${params::dbname_report}",
-      path    => '/bin:/usr/bin',
-      command => "mysql -uroot -proot ${params::dbname_report} < ${params::dbfile_report}",
-      require => Exec["mysql.create-report-db"]
-  }
-
-  exec {
-    'mysql.permissions-report-db':
-      path    => '/bin:/usr/bin',
-      command => "mysql -uroot -proot -e \"grant all privileges on ${params::dbname_report}.* to ${params::dbuser_report}@localhost identified by '${params::dbpass_report}';\"",
-      require => Exec["mysql.populate-report-db"]
+      require => Exec["mysql.populate-db"]
   }
 
   exec {
     'mysql.permissions-root':
       path    => '/bin:/usr/bin',
       command => "mysql -uroot -proot -e \"grant all privileges on *.* to root@'%' identified by 'root';\"",
-      require => Exec["mysql.permissions-report-db"]
+      require => Exec["mysql.permissions-db"]
   }
 
 }
