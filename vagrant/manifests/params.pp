@@ -11,6 +11,6 @@ class params
     $dbname = 'sampleDatabase'
     $dbuser = 'admin'
     $dbpass = 'XfDN7QhajRW1Vj'
-    $dbfile = '/vagrant/data/init.sql'
+    $dbfile = '/vagrant/vagrant/data/init.sql'
 
 }
