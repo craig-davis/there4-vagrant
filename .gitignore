@@ -8,4 +8,4 @@ __MACOSX
 .vagrant
 
 # Apache Log Files
-logs
+vagrant/log
